@@ -17,7 +17,7 @@ module Halogen.HTML.Events
   , onPaste
   , onCut
   , onClick
-  -- , onContextMenu
+  , onContextMenu
   , onDoubleClick
   , onMouseDown
   , onMouseEnter
@@ -28,7 +28,7 @@ module Halogen.HTML.Events
   , onMouseUp
   , onWheel
   , onKeyDown
-  -- , onKeyPress
+  , onKeyPress
   , onKeyUp
   , onBlur
   , onFocus
@@ -139,8 +139,8 @@ onCut = handler CET.cut <<< clipboardHandler
 onClick :: forall r i. (MouseEvent -> Maybe i) -> IProp (onClick :: MouseEvent | r) i
 onClick = handler MET.click <<< mouseHandler
 
--- onContextMenu :: forall r i. (MouseEvent -> Maybe i) -> IProp (onContextMenu :: MouseEvent | r) i
--- onContextMenu = handler ET.contextmenu <<< mouseHandler
+onContextMenu :: forall r i. (MouseEvent -> Maybe i) -> IProp (onContextMenu :: MouseEvent | r) i
+onContextMenu = handler (EventType "contextmenu") <<< mouseHandler
 
 onDoubleClick :: forall r i. (MouseEvent -> Maybe i) -> IProp (onDoubleClick :: MouseEvent | r) i
 onDoubleClick = handler MET.dblclick <<< mouseHandler
@@ -172,8 +172,8 @@ onWheel = handler WET.wheel <<< wheelHandler
 onKeyDown :: forall r i. (KeyboardEvent -> Maybe i) -> IProp (onKeyDown :: KeyboardEvent | r) i
 onKeyDown = handler KET.keydown <<< keyHandler
 
--- onKeyPress :: forall r i. (KeyboardEvent -> Maybe i) -> IProp (onKeyPress :: KeyboardEvent | r) i
--- onKeyPress = handler KET.keypress <<< keyHandler
+onKeyPress :: forall r i. (KeyboardEvent -> Maybe i) -> IProp (onKeyPress :: KeyboardEvent | r) i
+onKeyPress = handler (EventType "keypress") <<< keyHandler
 
 onKeyUp :: forall r i. (KeyboardEvent -> Maybe i) -> IProp (onKeyUp :: KeyboardEvent | r) i
 onKeyUp = handler KET.keyup <<< keyHandler
