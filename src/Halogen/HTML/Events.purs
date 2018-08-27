@@ -17,7 +17,7 @@ module Halogen.HTML.Events
   , onPaste
   , onCut
   , onClick
-  -- , onContextMenu
+  , onContextMenu
   , onDoubleClick
   , onMouseDown
   , onMouseEnter
@@ -28,7 +28,7 @@ module Halogen.HTML.Events
   , onMouseUp
   , onWheel
   , onKeyDown
-  -- , onKeyPress
+  , onKeyPress
   , onKeyUp
   , onBlur
   , onFocus
@@ -66,7 +66,7 @@ import Halogen.HTML.Core (Prop)
 import Halogen.HTML.Core as Core
 import Halogen.HTML.Properties (IProp)
 import Halogen.Query (Action, action)
-import Halogen.Query.InputF (InputF(..))
+import Halogen.Query.Input (Input(..))
 import Unsafe.Coerce (unsafeCoerce)
 import Web.Clipboard.ClipboardEvent (ClipboardEvent)
 import Web.Clipboard.ClipboardEvent.EventTypes as CET
@@ -92,7 +92,7 @@ input_ :: forall f a. Action f -> a -> Maybe (f Unit)
 input_ f _ = Just $ action f
 
 handler :: forall r i. EventType -> (Event -> Maybe i) -> IProp r i
-handler et = (unsafeCoerce :: (EventType -> (Event -> Maybe i) -> Prop i) -> EventType -> (Event -> Maybe (InputF Unit i)) -> IProp r i) Core.handler et <<< map (map Query)
+handler et = (unsafeCoerce :: (EventType -> (Event -> Maybe i) -> Prop i) -> EventType -> (Event -> Maybe (Input i)) -> IProp r i) Core.handler et <<< map (map Action)
 
 onAbort :: forall r i. (Event -> Maybe i) -> IProp (onAbort :: Event | r) i
 onAbort = handler (EventType "abort")
@@ -139,8 +139,8 @@ onCut = handler CET.cut <<< clipboardHandler
 onClick :: forall r i. (MouseEvent -> Maybe i) -> IProp (onClick :: MouseEvent | r) i
 onClick = handler MET.click <<< mouseHandler
 
--- onContextMenu :: forall r i. (MouseEvent -> Maybe i) -> IProp (onContextMenu :: MouseEvent | r) i
--- onContextMenu = handler ET.contextmenu <<< mouseHandler
+onContextMenu :: forall r i. (MouseEvent -> Maybe i) -> IProp (onContextMenu :: MouseEvent | r) i
+onContextMenu = handler (EventType "contextmenu") <<< mouseHandler
 
 onDoubleClick :: forall r i. (MouseEvent -> Maybe i) -> IProp (onDoubleClick :: MouseEvent | r) i
 onDoubleClick = handler MET.dblclick <<< mouseHandler
@@ -172,8 +172,8 @@ onWheel = handler WET.wheel <<< wheelHandler
 onKeyDown :: forall r i. (KeyboardEvent -> Maybe i) -> IProp (onKeyDown :: KeyboardEvent | r) i
 onKeyDown = handler KET.keydown <<< keyHandler
 
--- onKeyPress :: forall r i. (KeyboardEvent -> Maybe i) -> IProp (onKeyPress :: KeyboardEvent | r) i
--- onKeyPress = handler KET.keypress <<< keyHandler
+onKeyPress :: forall r i. (KeyboardEvent -> Maybe i) -> IProp (onKeyPress :: KeyboardEvent | r) i
+onKeyPress = handler (EventType "keypress") <<< keyHandler
 
 onKeyUp :: forall r i. (KeyboardEvent -> Maybe i) -> IProp (onKeyUp :: KeyboardEvent | r) i
 onKeyUp = handler KET.keyup <<< keyHandler
